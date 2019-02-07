@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title> UI Dependent Select Demo</title>
+	<meta name="description" content="A UI with dependent selects, and JS to restrict the values on the child select">
+    <meta name="keywords" content="Select, Dropdown, Dependent Dropdown, JS, JavaScript">
+    <meta name="author" content="Anil Shrestha">
+
+    <style type="text/css">
+    	* {
+			  margin: 0;
+			  padding: 0;
+			  box-sizing: border-box;
+			}
+
+		#cloud-region option{
+		    display:none;
+		}
+
+		#cloud-region option.label{
+		    display:block;
+		}
+
+		.main{
+			margin: 50px;
+		}
+
+		#hint{
+			color: red;
+		}
+    </style>
+</head>
+<body>
+	<div class="main">
+		<div>
+			<select id="cloud-provider" name="cloud-provider">
+			  <option value="0">Select Cloud Provider</option>
+			  <option value="1" name="amazon">Amazon</option>
+			  <option value="2" name="azure" >Azure</option>
+			  <option value="3" name="google" >Google</option>
+			</select>
+		</div>
+		<br>
+		<div >
+			<select id="cloud-region" name="cloud-region" disabled="disabled">
+			    <option class="lablel" value>Select Cloud Region</option>
+			    <!--AWS Region Options-->
+			    <option rel="1" value="1">aws-region-1</option>
+			    <option rel="1" value="2">aws-region-2</option>
+			    <option rel="1" value="3">aws-region-3</option>
+			    <!--Azure Region Options-->
+			    <option rel="2" value="1">azure-region-1</option>
+			    <option rel="2" value="2">azure-region-2</option>
+			    <option rel="2" value="3">azure-region-3</option>
+			    <!--Google Region Options-->
+			    <option rel="3" value="1">gcp-region-1</option>
+			    <option rel="3" value="2">gcp-region-2</option>
+			    <option rel="3" value="3">gcp-region-3</option>
+			</select>
+			<em id="hint" style="display: block;"> ** Cloud Provider must be selected in order for Cloud Region to be available.</em>
+		</div>
+	</div>
+
+	<script>
+	  var cloudProvider = document.getElementById('cloud-provider');
+	  var cloudRegion = document.getElementById('cloud-region');
+	  var userHint = document.getElementById('hint');
+	  cloudProvider.addEventListener('change', () => {
+	   		var rel = document.getElementById('cloud-provider').value;
+	   		elements = cloudRegion.querySelectorAll('option');
+	   		[].forEach.call(elements, (el) => {
+		        el.style = '';
+		    })
+
+	        cloudRegion.value = ('');
+	        if(rel === '0') {
+	        	userHint.style.display = 'block';
+	        	cloudRegion.setAttribute('disabled', 'disabled');
+	        	return 
+	        }
+
+	        var opts = []
+	        opts = cloudRegion.querySelectorAll('[rel="'+rel+'"]');
+	        cloudRegion.disabled = false;
+	        userHint.style.display = 'none';
+	        [].forEach.call(opts, (opt) => {
+	        	opt.style.display = 'block';
+	        }) 
+	        
+	    });
+	</script>
+</body>
+</html>
